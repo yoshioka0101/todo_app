@@ -37,6 +37,21 @@ func main() {
 		todos = append(todos, *todo)
 
 		return c.Satatus(201).JSON(todo)
-	})	
+	})
+
+	// 更新をする
+	app.Patch("api/todos/:id",func(c *fiber.Ctx) error {
+		id := c.Params("id")
+
+		// Todosをスライスした内容から一致する値を取ってきている
+		for i, todo := range todos {
+			if fmt.Sptint(todo.ID) == id {
+				todo[i].Comleted = true
+				return c.Status(200).JSON(todos[i])
+			}
+		}
+
+		return c.Status(404).JSON(fiber.Map{"error":"Todo not found!"})
+	})
 
 }
